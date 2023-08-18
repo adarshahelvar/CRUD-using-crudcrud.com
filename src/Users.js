@@ -1,25 +1,44 @@
 import axios from "axios";
-import React, {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 function Users() {
   const [users, setUsers] = useState([]);
   useEffect(() => {
     axios
-      .get("http://localhost:3001")
-      .then(result => setUsers(result.data))
-      .catch(err => console.log(err));
+      .get(
+        "https://crudcrud.com/api/4da140e958804923868d9b97cbc5982d/createUser"
+      )
+      .then((result) => setUsers(result.data))
+      .catch((err) => console.log(err));
   }, []);
 
-  const handleDelete = id => {
+  const handleDelete = (id) => {
     axios
-      .delete("http://localhost:3001/deleteUser/" + id)
-      .then(res => {
+      .delete(
+        "https://crudcrud.com/api/4da140e958804923868d9b97cbc5982d/createUser/" +
+          id
+      )
+      .then((res) => {
         console.log(res);
         window.location.reload();
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   };
+
+  // const handleUpdate = (id) => {
+  //   axios
+  //     .put(
+  //       "https://crudcrud.com/api/4da140e958804923868d9b97cbc5982d/createUser/" +
+  //         id,
+  //     )
+  //     .then((res) => {
+  //       console.log(res);
+  //       window.location.reload();
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
+
   return (
     <div className="d-flex vh-100 bg-info justify-content-center align-items-center">
       <div className="w-50 bg-white rounded p-3">
@@ -36,22 +55,29 @@ function Users() {
             </tr>
           </thead>
           <tbody>
-            {users.map(user => {
+            {users.map((user) => {
               return (
-                <tr>
+                <tr key={user._id}>
                   <td>{user.name}</td>
                   <td>{user.email}</td>
                   <td>{user.age}</td>
                   <td>
                     <Link
-                      to={`/update/${user._id}`}
+                      to={{
+                        pathname: `/update/${user._id}`,
+                        state: {
+                          name: user.name,
+                          email: user.email,
+                          age: user.age,
+                        },
+                      }}
                       className="btn btn-success"
                     >
                       Update
                     </Link>
                     <button
                       className="btn btn-danger"
-                      onClick={e => handleDelete(user._id)}
+                      onClick={() => handleDelete(user._id)}
                     >
                       Delete
                     </button>
@@ -65,4 +91,5 @@ function Users() {
     </div>
   );
 }
+
 export default Users;

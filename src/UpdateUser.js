@@ -1,10 +1,10 @@
 import React from "react";
-import {useParams, useNavigate} from "react-router-dom";
-import {useState, useEffect} from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 function UpdateUser() {
-  const {id} = useParams();
+  const { id } = useParams();
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [age, setAge] = useState();
@@ -13,25 +13,32 @@ function UpdateUser() {
   //fetch the record(id) we need from db
   useEffect(() => {
     axios
-      .get("http://localhost:3001/getUser/" + id)
-      .then(result => {
-        console.log(result);
-        setName(result.data.name);
-        setEmail(result.data.email);
-        setAge(result.data.age);
+      .get(
+        `https://crudcrud.com/api/4da140e958804923868d9b97cbc5982d/createUser/${id}`
+      )
+      .then((result) => {
+        const userData = result.data;
+        // console.log(userData);
+        if (!name) setName(userData.name);
+        if (!email) setEmail(userData.email);
+        if (!age) setAge(userData.age);
       })
-      .catch(err => console.log(err));
-  }, []);
+      .catch((err) => console.log(err));
+  }, [id, name, email, age]);
 
-  const Update = e => {
+  const Update = (e) => {
     e.preventDefault();
     axios
-      .put("http://localhost:3001/updateUser/" + id, {name, email, age})
-      .then(result => {
+      .put(
+        "https://crudcrud.com/api/4da140e958804923868d9b97cbc5982d/createUser/" +
+          id,
+        { name, email, age }
+      )
+      .then((result) => {
         console.log(result);
         navigate("/");
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -46,7 +53,7 @@ function UpdateUser() {
               placeholder="Enter Name"
               className="form-control"
               value={name}
-              onChange={e => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
             />
           </div>
           <div className="mb-2">
@@ -56,7 +63,7 @@ function UpdateUser() {
               placeholder="Enter Email"
               className="form-control"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="mb-2">
@@ -66,7 +73,7 @@ function UpdateUser() {
               placeholder="Enter Age"
               className="form-control"
               value={age}
-              onChange={e => setAge(e.target.value)}
+              onChange={(e) => setAge(e.target.value)}
             />
           </div>
           <button className="btn btn-success">Update</button>
