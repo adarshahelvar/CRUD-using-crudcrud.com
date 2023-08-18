@@ -11,6 +11,7 @@ function UpdateUser() {
   const navigate = useNavigate();
 
   //fetch the record(id) we need from db
+  // here DB used is crudcrud.com
   useEffect(() => {
     axios
       .get(
